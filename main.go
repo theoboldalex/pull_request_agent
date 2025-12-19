@@ -10,13 +10,14 @@ import (
 )
 
 const MODEL = "gpt-4o"
+const GIT = "git"
 
 func GetCodeDiff() (string, error) {
-	mainBranch, err := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD").Output()
+	mainBranch, err := exec.Command(GIT, "rev-parse", "--abbrev-ref", "HEAD").Output()
 	if err != nil {
 		return "", err
 	}
-	currentBranch, err := exec.Command("git", "branch", "--show-current").Output()
+	currentBranch, err := exec.Command(GIT, "branch", "--show-current").Output()
 	if err != nil {
 		return "", err
 	}
@@ -28,7 +29,7 @@ func GetCodeDiff() (string, error) {
 		diffCommand = append(diffCommand, mainBranchName)
 	}
 
-	diffString, err := exec.Command("git", diffCommand...).Output()
+	diffString, err := exec.Command(GIT, diffCommand...).Output()
 	if err != nil {
 		return "", err
 	}
