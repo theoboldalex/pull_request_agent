@@ -1,4 +1,4 @@
-# Pull Request Agent
+# Pull Request Agent 🤖
 
 A really basic pull request agent that will take the diff of the current branch against the previous commit on the main branch. It uses this diff to write a brief pull request title and description.
 
