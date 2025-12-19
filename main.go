@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/nlpodyssey/openai-agents-go/agents"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/nlpodyssey/openai-agents-go/agents"
 )
 
 const MODEL = "gpt-4o"
