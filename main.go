@@ -13,12 +13,20 @@ import (
 const MODEL = "gpt-4o"
 const GIT = "git"
 
+// runCommand is a package-level variable so it can be mocked in tests.
+var runCommand = func(name string, args ...string) ([]byte, error) {
+	return exec.Command(name, args...).Output()
+}
+
+// readFile is a package-level variable wrapper for os.ReadFile so it can be mocked in tests.
+var readFile = os.ReadFile
+
 func GetCodeDiff() (string, error) {
-	mainBranch, err := exec.Command(GIT, "rev-parse", "--abbrev-ref", "HEAD").Output()
+	mainBranch, err := runCommand(GIT, "rev-parse", "--abbrev-ref", "HEAD")
 	if err != nil {
 		return "", err
 	}
-	currentBranch, err := exec.Command(GIT, "branch", "--show-current").Output()
+	currentBranch, err := runCommand(GIT, "branch", "--show-current")
 	if err != nil {
 		return "", err
 	}
@@ -30,7 +38,7 @@ func GetCodeDiff() (string, error) {
 		diffCommand = append(diffCommand, mainBranchName)
 	}
 
-	diffString, err := exec.Command(GIT, diffCommand...).Output()
+	diffString, err := runCommand(GIT, diffCommand...)
 	if err != nil {
 		return "", err
 	}
@@ -38,7 +46,7 @@ func GetCodeDiff() (string, error) {
 }
 
 func GetAgentInstructions() (string, error) {
-	instructionsBytes, err := os.ReadFile("instructions.md")
+	instructionsBytes, err := readFile("instructions.md")
 	if err != nil {
 		return "", err
 	}
